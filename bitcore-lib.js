@@ -4743,8 +4743,92 @@ function disableRegtest() {
 }
 
 
-var bcclivenet = livenet;
-var bcctestnet = testnet;
+
+addNetwork({
+  name: 'bcclivenet',
+  alias: 'bccmainnet',
+  pubkeyhash: 0x00,
+  privatekey: 0x80,
+  scripthash: 0x05,
+  xpubkey: 0x0488b21e,
+  xprivkey: 0x0488ade4,
+  networkMagic: 0xf9beb4d9,
+  port: 8333,
+  dnsSeeds: [
+    'seed.bitcoin.sipa.be',
+    'dnsseed.bluematt.me',
+    'dnsseed.bitcoin.dashjr.org',
+    'seed.bitcoinstats.com',
+    'seed.bitnodes.io',
+    'bitseed.xf2.org'
+  ]
+});
+
+/**
+ * @instance
+ * @member Networks#livenet
+ */
+var bcclivenet = get('bcclivenet');
+
+
+
+addNetwork({
+  name: 'bcctestnet',
+  alias: 'bccregtest',
+  pubkeyhash: 0x6f,
+  privatekey: 0xef,
+  scripthash: 0xc4,
+  xpubkey: 0x043587cf,
+  xprivkey: 0x04358394
+});
+
+/**
+ * @instance
+ * @member Networks#testnet
+ */
+var bcctestnet = get('bcctestnet');
+
+
+Object.defineProperty(bcctestnet, 'port', {
+  enumerable: true,
+  configurable: false,
+  get: function() {
+    if (this.regtestEnabled) {
+      return REGTEST.PORT;
+    } else {
+      return TESTNET.PORT;
+    }
+  }
+});
+
+Object.defineProperty(bcctestnet, 'networkMagic', {
+  enumerable: true,
+  configurable: false,
+  get: function() {
+    if (this.regtestEnabled) {
+      return REGTEST.NETWORK_MAGIC;
+    } else {
+      return TESTNET.NETWORK_MAGIC;
+    }
+  }
+});
+
+Object.defineProperty(bcctestnet, 'dnsSeeds', {
+  enumerable: true,
+  configurable: false,
+  get: function() {
+    if (this.regtestEnabled) {
+      return REGTEST.DNS_SEEDS;
+    } else {
+      return TESTNET.DNS_SEEDS;
+    }
+  }
+});
+
+
+
+
+
 /**
  * @namespace Networks
  */
